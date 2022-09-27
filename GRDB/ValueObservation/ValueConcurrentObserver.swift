@@ -411,22 +411,28 @@ extension ValueConcurrentObserver {
                         let fetchedValue: Reducer.Fetched
                         
                         switch self.trackingMode {
-                        case .constantRegion:
-                            fetchedValue = try databaseAccess.fetch(writerDB)
-                            events.willTrackRegion?(initialRegion)
-                            self.startObservation(writerDB, observedRegion: initialRegion)
-                            
+                        case let .constantRegion(regions):
+                            fetchedValue = try writerDB.isolated(readOnly: true) {
+                                try databaseAccess.fetch(writerDB)
+                            }
+                            let region = try DatabaseRegion.union(regions)(writerDB)
+                            let observedRegion = try region.observableRegion(writerDB)
+                            events.willTrackRegion?(observedRegion)
+                            self.startObservation(writerDB, observedRegion: observedRegion)
+
                         case .constantRegionRecordedFromSelection,
                                 .nonConstantRegionRecordedFromSelection:
                             var region = DatabaseRegion()
                             fetchedValue = try writerDB.recordingSelection(&region) {
-                                try databaseAccess.fetch(writerDB)
+                                try writerDB.isolated(readOnly: true) {
+                                    try databaseAccess.fetch(writerDB)
+                                }
                             }
-                            observedRegion = try region.observableRegion(writerDB)
+                            let observedRegion = try region.observableRegion(writerDB)
                             events.willTrackRegion?(observedRegion)
                             self.startObservation(writerDB, observedRegion: observedRegion)
                         }
-                        
+
                         // Reduce
                         //
                         // Reducing is performed asynchronously, so that we do not lock
