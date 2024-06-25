@@ -7,7 +7,7 @@ The default branch for this repository is `SQLCipher` so that we can more easily
 
 ## Versioning
 
-* This Package: *Session-6.27.0*
+* This Package: *106.27.0*
 * GRDB: *6.27.0*
 * SQLCipher: *4.6.0*
 
