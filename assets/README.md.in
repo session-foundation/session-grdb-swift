@@ -7,15 +7,12 @@ The default branch for this repository is `SQLCipher` so that we can more easily
 
 ## Versioning
 
-* This Package: *${new_version}*
+* This Package: *Session-${new_version}*
 * GRDB: *${upstream_version}*
 * SQLCipher: *${sqlcipher_version}*
 
 ## Contributions
 We do not accept contributions to this repository at this time.  However, feel free to open an issue in order to start a discussion.
-
-## We are hiring!
-DuckDuckGo is growing fast and we continue to expand our fully distributed team. We embrace diverse perspectives, and seek out passionate, self-motivated people, committed to our shared vision of raising the standard of trust online. If you are a senior software engineer capable in either iOS or Android, visit our [careers](https://duckduckgo.com/hiring/#open) page to find out more about our openings!
 
 ## Updating from Upstream
 

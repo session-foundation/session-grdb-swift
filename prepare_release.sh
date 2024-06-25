@@ -85,7 +85,7 @@ update_readme() {
 	SQLCipher version: ${current_sqlcipher_version} -> ${sqlcipher_version}
 	EOF
 
-	while ! [[ "${new_version}" =~ [0-9]\.[0-9]\.[0-9] ]]; do
+	while ! [[ "${new_version}" =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; do
 		read -rp "Input Session GRDB.swift desired version number (x.y.z): " new_version < /dev/tty
 	done
 
@@ -96,20 +96,49 @@ update_readme() {
 }
 
 build_and_test_release() {
-	echo "Testing the build ..."
+	local log_file="${cwd}/.build/Logs/GRDB-${grdb_tag}-unittests.log"
+
+	printf '%s' "Building GRDB ... "
 	rm -rf "${cwd}/.build"
+	mkdir -p "${cwd}/.build/Logs" && touch "${log_file}"
+	
+	if xcodebuild build-for-testing \
+		-project "${cwd}/GRDB.xcodeproj" \
+		-scheme "GRDB" \
+		-derivedDataPath "${cwd}/.build" >"${log_file}" 2>&1; then
+
+		echo "✅"
+	else
+		echo "❌"
+		echo "Failed to build GRDB with SQLCipher support. See log file at ${log_file} for more info."
+		exit 1
+	fi
+
+	echo "Testing GRDB ... ⚙️"
 	# The skipped test references a test database added with a podfile.
 	# We're safe to disable it since we don't care about SQLCipher 3 compatibility anyway.
-	swift test --skip "EncryptionTests.testSQLCipher3Compatibility"
+	if xcodebuild test-without-building \
+		-project "${cwd}/GRDB.xcodeproj" \
+		-scheme "GRDB" \
+		-derivedDataPath "${cwd}/.build" \
+		-skip-testing:GRDBTests/EncryptionTests/testSQLCipher3Compatibility \
+		| tee -a "$log_file" | $log_formatter 2>&1; then
 
-	echo ""
-	swift build -c release
+		echo "Unit tests succeeded ✅"
 
-	cat <<- EOF
+		cat <<- EOF
 
-	SQLCipher ${sqlcipher_tag} is ready to use with GRDB.swift ${grdb_tag} 🎉
+		SQLCipher ${sqlcipher_tag} is ready to use with GRDB.swift ${grdb_tag} 🎉
 
-	EOF
+		EOF
+	else
+		cat <<-EOF
+		Unit tests failed ❌
+		See log file at ${log_file} for more info.
+		Rerun with -f to skip testing.
+		EOF
+		exit 1
+	fi
 }
 
 setup_new_release_branch() {

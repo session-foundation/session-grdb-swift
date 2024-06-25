@@ -7,13 +7,12 @@ The default branch for this repository is `SQLCipher` so that we can more easily
 
 ## Versioning
 
-* This Package: *2.0.0*
-* GRDB: *6.6.0*
-* SQLCipher: *4.5.3*
+* This Package: *Session-6.27.0*
+* GRDB: *6.27.0*
+* SQLCipher: *4.6.0*
 
 ## Contributions
 We do not accept contributions to this repository at this time.  However, feel free to open an issue in order to start a discussion.
-
 
 ## Updating from Upstream
 
@@ -72,6 +71,7 @@ manually. See [general instructions](https://github.com/sqlcipher/sqlcipher#comp
 * Use `./configure --with-crypto-lib=none`.
 * Remember to use `make sqlite3.c` and not `make`.
 * Copy `sqlite3.c` and `sqlite3.h` to `Sources/SQLCipher/sqlite3.c` and `Sources/SQLCipher/include/sqlite3.h`.
+
 
 --
 
