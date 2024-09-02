@@ -71,7 +71,7 @@ clone_sqlcipher() {
 	echo "✅"
 
 	export GIT_DIR="${sqlcipher_dir}/.git"
-	sqlcipher_tag="$(git describe --tags --abbrev=0)"
+	sqlcipher_tag="${SQLCIPHER_VERSION:-$(git describe --tags --abbrev=0)}"
 	eval git checkout "$(git describe --tags --abbrev=0)" "$mute"
 	unset GIT_DIR
 	echo "Checked out SQLCipher latest tag: $sqlcipher_tag"
@@ -144,8 +144,9 @@ patch_grdb() {
 
 	printf '%s' "Patching GRDB ... "
 	: > "${grdb_dir}/GRDB/Export.swift"
-	echo '#import "sqlite3.h"' > "${grdb_dir}/Support/GRDB-Bridging.h"
+	# echo '#import "sqlite3.h"' > "${grdb_dir}/Support/GRDB-Bridging.h"
 	echo "#include \"${grdb_dir}/SQLCipher.xcconfig\"" >> "${grdb_dir}/Support/GRDBDeploymentTarget.xcconfig"
+	# sed -i -E 's/<sqlite3.h>/"sqlite3.h"/' "${grdb_dir}/Support/grdb_config.h"
 
 	if patch -s -p1 -f -d "$grdb_dir" < "$patch_file"; then
 		echo "✅"
