@@ -310,11 +310,9 @@ make_release() {
 	git push origin main
 	git push origin "$new_version"
 
-	gh release create "$new_version" --generate-notes "${xcframework_zip}" --repo oxen-io/session-grdb-swift
-
 	cat <<- EOF
 
-	🎉 Release is ready at https://github.com/oxen-io/session-grdb-swift/releases/tag/${new_version}
+	🎉 Release is to upload, archive at "${xcframework_zip}"
 	EOF
 }
 
