@@ -3,7 +3,7 @@
 ## What is this?
 This is a fork of [GRDB](https://github.com/groue/GRDB.swift) with added support for [SQLCipher Community Edition](https://www.zetetic.net/sqlcipher/open-source/), packaged into XCFramework so that it can be consumed as a Swift Package.
 
-The default branch for this repository is `main` (as opposed to upstream's `master`) and it doesn't include GRDB (or SQLCipher) source code – only the Swift Package definition and release scripts/assets. XCFramework archives are attached directly in [GitHub Releases](https://github.com/duckduckgo/GRDB.swift/releases).
+The default branch for this repository is `main` (as opposed to upstream's `master`) and it doesn't include GRDB (or SQLCipher) source code – only the Swift Package definition and release scripts/assets. XCFramework archives are attached directly in [GitHub Releases](https://github.com/oxen-io/session-grdb-swift/releases).
 
 ## Version
 
@@ -13,9 +13,6 @@ The default branch for this repository is `main` (as opposed to upstream's `mast
 
 ## Contributions
 We do not accept contributions to this repository at this time.  However, feel free to open an issue in order to start a discussion.
-
-## We are hiring!
-DuckDuckGo is growing fast and we continue to expand our fully distributed team. We embrace diverse perspectives, and seek out passionate, self-motivated people, committed to our shared vision of raising the standard of trust online. If you are a senior software engineer capable in either iOS or Android, visit our [careers](https://duckduckgo.com/hiring/#open) page to find out more about our openings!
 
 ## Updating from Upstream
 
