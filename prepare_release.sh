@@ -98,7 +98,7 @@ update_readme() {
 	SQLCipher version: ${current_sqlcipher_version} -> ${sqlcipher_version}
 	EOF
 
-	while ! [[ "${new_version}" =~ [0-9]\.[0-9]\.[0-9] ]]; do
+	while ! [[ "${new_version}" =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; do
 		read -rp "Input Session GRDB.swift desired version number (x.y.z): " new_version < /dev/tty
 	done
 
