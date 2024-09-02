@@ -307,8 +307,6 @@ make_release() {
 	git add "${cwd}/README.md" "${cwd}/Package.swift" "${cwd}/assets/xcodeproj.patch"
 	git commit -m "$commit_message"
 	git tag -m "$commit_message" "$new_version"
-	git push origin main
-	git push origin "$new_version"
 
 	cat <<- EOF
 
