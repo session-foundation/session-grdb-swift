@@ -308,9 +308,11 @@ make_release() {
 	git commit -m "$commit_message"
 	git tag -m "$commit_message" "$new_version"
 
+	mv "${xcframework_zip}" "./GRDB.xcframework.zip"
+
 	cat <<- EOF
 
-	🎉 Release is to upload, archive at "${xcframework_zip}"
+	🎉 Release is to upload, archive at "./GRDB.xcframework.zip"
 	EOF
 }
 
