@@ -79,7 +79,7 @@ clone_sqlcipher() {
 
 update_license() {
 	rm -rf "${cwd}/LICENSE"
-	cp "${cwd}/LICENSE" "$grdb_dir/LICENSE"
+	cp "$grdb_dir/LICENSE" "${cwd}/LICENSE"
 }
 
 update_readme() {
@@ -328,6 +328,7 @@ main() {
 
 	clone_grdb "$grdb_tag"
 	clone_sqlcipher
+	update_license
 	update_readme
 	build_sqlcipher
 	patch_grdb
