@@ -77,6 +77,11 @@ clone_sqlcipher() {
 	echo "Checked out SQLCipher latest tag: $sqlcipher_tag"
 }
 
+update_license() {
+	rm -rf "${cwd}/LICENSE"
+	cp "${cwd}/LICENSE" "$grdb_dir/LICENSE"
+}
+
 update_readme() {
 	current_version="$(git describe --tags --abbrev=0 --exclude=v* main)"
 	current_upstream_version="$(grep '\* GRDB' README.md | cut -d '*' -f 3)"
