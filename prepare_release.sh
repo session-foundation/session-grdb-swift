@@ -10,31 +10,36 @@ fi
 cwd="$(dirname "${BASH_SOURCE[0]}")"
 workdir="$(mktemp -d)"
 mkdir -p "${workdir}/Logs"
-# trap 'rm -rf "$workdir"' EXIT
 grdb_dir="${workdir}/GRDB-source"
 sqlcipher_dir="${workdir}/sqlcipher-source"
+should_clean_up=1
 
 print_usage_and_exit() {
 	cat <<- EOF
 	Usage:
-	  $ $(basename "$0") [-v] [-h] [<grdb_tag>]
+	  $ $(basename "$0") [-k] [-v] [-h] [<grdb_tag>]
 
 	Options:
 	 -h      Show this message
 	 -v      Verbose output
+	 -k      Keep the temporary directory
 	EOF
 
+	rm -rf "$workdir"
 	exit 1
 }
 
 read_command_line_arguments() {
-	while getopts 'hv' OPTION; do
+	while getopts 'hvk' OPTION; do
 		case "${OPTION}" in
 			h)
 				print_usage_and_exit
 				;;
 			v)
 				mute=
+				;;
+			k)
+				should_clean_up=0
 				;;
 			*)
 				;;
@@ -46,6 +51,10 @@ read_command_line_arguments() {
 	grdb_tag="$1"
 	if [[ -n "$grdb_tag" ]]; then
 		force_release=1
+	fi
+
+	if [[ "$should_clean_up" == "1" ]]; then
+		trap 'rm -rf "$workdir"' EXIT
 	fi
 }
 
@@ -322,9 +331,13 @@ make_release() {
 }
 
 main() {
+	read_command_line_arguments "$@"
+	
 	printf '%s\n' "Using directory at ${workdir}"
 
-	read_command_line_arguments "$@"
+	if [[ "$should_clean_up" != "1" ]]; then
+		printf '%s\n' "    Note: Directory will not automatically be cleaned up"
+	fi
 
 	clone_grdb "$grdb_tag"
 	clone_sqlcipher
